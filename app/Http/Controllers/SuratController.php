@@ -1,0 +1,408 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Models\Surat;
+
+use Auth;
+use DataTables;
+use URL;
+use Helper;
+use Image;
+use Response;
+
+class SuratController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        
+        if (request()->ajax()) {
+            $user = Auth::user();
+            $roles = $user->getRoleNames();
+            if ($roles[0] == "sekda") {
+                $surat = Surat::all();
+
+            return Datatables::of($surat)
+                ->addIndexColumn()
+                ->editColumn('sifat_surat', function($row){
+                    switch ($row->sifat_surat) {
+                        case 'biasa' :
+                            return '<span class="badge badge-primary">Biasa</span>';
+                            break;
+                        case 'segera' :
+                            return '<span class="badge badge-danger">Segera</span>';
+                            break;
+                    }
+                })
+                ->editColumn('status', function($row){
+                    switch ($row->status) {
+                        case '1' :
+                            return '<span class="badge badge-warning">Belum di Baca</span>';
+                            break;
+                        case '2' :
+                            return '<span class="badge badge-secondary">Sudah Dibaca</span>';
+                            break;
+                    }
+                })
+                ->editColumn('tgl_surat', function ($row) {
+                    return Carbon::parse($row->tgl_surat)->translatedFormat('d M Y');
+                })
+                ->editColumn('tgl_acara', function ($row) {
+                    return Carbon::parse($row->tgl_acara)->translatedFormat('d M Y');
+                })
+                ->editColumn('update_at', function ($row) {
+                    return Carbon::parse($row->update_at)->translatedFormat('d M Y');
+                })
+                ->editColumn('created_by', function($row){
+                    return $row->userCreate->name;
+                })
+                ->addColumn('action', function ($row) {
+                    return '
+                            <a class="btn btn-success btn-sm btn-icon waves-effect waves-themed" href="' . route('surat.edit', $row->uuid) . '"><i class="fal fa-edit"></i></a>';
+                })
+                ->removeColumn('id')
+                ->removeColumn('uuid')
+                ->rawColumns(['action','sifat_surat','status'])
+                ->make(true);
+        }
+        $surat = Surat::all();
+
+            return Datatables::of($surat)
+                ->addIndexColumn()
+                ->editColumn('sifat_surat', function($row){
+                    switch ($row->sifat_surat) {
+                        case 'biasa' :
+                            return '<span class="badge badge-primary">Biasa</span>';
+                            break;
+                        case 'segera' :
+                            return '<span class="badge badge-danger">Segera</span>';
+                            break;
+                    }
+                })
+                ->editColumn('status', function($row){
+                    switch ($row->status) {
+                        case '1' :
+                            return '<span class="badge badge-warning">Belum di Baca</span>';
+                            break;
+                        case '2' :
+                            return '<span class="badge badge-secondary">Sudah Dibaca</span>';
+                            break;
+                    }
+                })
+                ->editColumn('tgl_surat', function ($row) {
+                    return Carbon::parse($row->tgl_surat)->translatedFormat('d M Y');
+                })
+                ->editColumn('tgl_acara', function ($row) {
+                    return Carbon::parse($row->tgl_acara)->translatedFormat('d M Y');
+                })
+                ->editColumn('update_at', function ($row) {
+                    return Carbon::parse($row->update_at)->translatedFormat('d M Y');
+                })
+                ->editColumn('created_by', function($row){
+                    return $row->userCreate->name;
+                })
+                ->addColumn('action', function ($row) {
+                    return '
+                            <a class="btn btn-success btn-sm btn-icon waves-effect waves-themed" href="' . route('surat.edit', $row->uuid) . '"><i class="fal fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm btn-icon waves-effect waves-themed delete-btn" data-url="' . URL::route('surat.destroy', $row->uuid) . '" data-id="' . $row->uuid . '" data-token="' . csrf_token() . '" data-toggle="modal" data-target="#modal-delete"><i class="fal fa-trash-alt"></i></a>
+                            <a class="btn btn-primary btn-sm btn-icon waves-effect waves-themed" href="' . route('get.download', $row->uuid) . '"><i class="fal fa-print"></i></a>';
+                })
+                ->removeColumn('id')
+                ->removeColumn('uuid')
+                ->rawColumns(['action','sifat_surat','status'])
+                ->make(true);
+        }
+
+        return view('surat.index');
+    }
+
+    public function filter (Request $request)
+    {
+        $myDate = Surat::whereBetween('tgl_surat', array($request->get('start_date'), $request->get('end_date')))->get();
+
+        $user = Auth::user();
+            $roles = $user->getRoleNames();
+            if ($roles[0] == "sekda") {
+                $surat = Surat::all();
+
+            return Datatables::of($myDate)
+                ->addIndexColumn()
+                ->editColumn('sifat_surat', function($row){
+                    switch ($row->sifat_surat) {
+                        case 'biasa' :
+                            return '<span class="badge badge-primary">Biasa</span>';
+                            break;
+                        case 'segera' :
+                            return '<span class="badge badge-danger">Segera</span>';
+                            break;
+                    }
+                })
+                ->editColumn('status', function($row){
+                    switch ($row->status) {
+                        case '1' :
+                            return '<span class="badge badge-warning">Belum di Baca</span>';
+                            break;
+                        case '2' :
+                            return '<span class="badge badge-secondary">Sudah Dibaca</span>';
+                            break;
+                    }
+                })
+                ->editColumn('tgl_surat', function ($row) {
+                    return Carbon::parse($row->tgl_surat)->translatedFormat('d M Y');
+                })
+                ->editColumn('tgl_acara', function ($row) {
+                    return Carbon::parse($row->tgl_acara)->translatedFormat('d M Y');
+                })
+                ->editColumn('update_at', function ($row) {
+                    return Carbon::parse($row->update_at)->translatedFormat('d M Y');
+                })
+                ->editColumn('created_by', function($row){
+                    return $row->userCreate->name;
+                })
+                ->addColumn('action', function ($row) {
+                    return '
+                            <a class="btn btn-success btn-sm btn-icon waves-effect waves-themed" href="' . route('surat.edit', $row->uuid) . '"><i class="fal fa-edit"></i></a>';
+                })
+                ->removeColumn('id')
+                ->removeColumn('uuid')
+                ->rawColumns(['action','sifat_surat','status'])
+                ->make(true);
+        }
+        $surat = Surat::all();
+
+            return Datatables::of($myDate)
+                ->addIndexColumn()
+                ->editColumn('sifat_surat', function($row){
+                    switch ($row->sifat_surat) {
+                        case 'biasa' :
+                            return '<span class="badge badge-primary">Biasa</span>';
+                            break;
+                        case 'segera' :
+                            return '<span class="badge badge-danger">Segera</span>';
+                            break;
+                    }
+                })
+                ->editColumn('status', function($row){
+                    switch ($row->status) {
+                        case '1' :
+                            return '<span class="badge badge-warning">Belum di Baca</span>';
+                            break;
+                        case '2' :
+                            return '<span class="badge badge-secondary">Sudah Dibaca</span>';
+                            break;
+                    }
+                })
+                ->editColumn('tgl_surat', function ($row) {
+                    return Carbon::parse($row->tgl_surat)->translatedFormat('d M Y');
+                })
+                ->editColumn('tgl_acara', function ($row) {
+                    return Carbon::parse($row->tgl_acara)->translatedFormat('d M Y');
+                })
+                ->editColumn('update_at', function ($row) {
+                    return Carbon::parse($row->update_at)->translatedFormat('d M Y');
+                })
+                ->editColumn('created_by', function($row){
+                    return $row->userCreate->name;
+                })
+                ->addColumn('action', function ($row) {
+                    return '
+                            <a class="btn btn-success btn-sm btn-icon waves-effect waves-themed" href="' . route('surat.edit', $row->uuid) . '"><i class="fal fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm btn-icon waves-effect waves-themed delete-btn" data-url="' . URL::route('surat.destroy', $row->uuid) . '" data-id="' . $row->uuid . '" data-token="' . csrf_token() . '" data-toggle="modal" data-target="#modal-delete"><i class="fal fa-trash-alt"></i></a>
+                            <a class="btn btn-primary btn-sm btn-icon waves-effect waves-themed" href="' . route('get.download', $row->uuid) . '"><i class="fal fa-print"></i></a>';
+                })
+                ->removeColumn('id')
+                ->removeColumn('uuid')
+                ->rawColumns(['action','sifat_surat','status'])
+                ->make(true);
+        }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $user = Auth::user();
+            $roles = $user->getRoleNames();
+            if ($roles[0] == "sekda") {
+                return view('surat.index');
+            }
+        return view('surat.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+            'jenis_surat' => 'required',
+            'asal_surat' => 'required',
+            'tgl_surat' => 'required',
+            'perihal' => 'required',
+            'tgl_acara' => 'required',
+            'sifat_surat' => 'required',
+            'surat' => 'required'
+        ];
+
+        $messages = [
+            '*.required' => 'Field tidak boleh kosong !',
+            '*.min' => 'Nama tidak boleh kurang dari 2 karakter !',
+        ];
+
+        $this->validate($request, $rules, $messages);
+        // dd($request->all());
+
+        $surat = new Surat();
+        $surat->jenis_surat = $request->jenis_surat;
+        $surat->asal_surat = $request->asal_surat;
+        $surat->tgl_surat = $request->tgl_surat;
+        $surat->perihal = $request->perihal;
+        $surat->tgl_acara = $request->tgl_acara;
+        $surat->sifat_surat = $request->sifat_surat;
+        $surat->surat = $request->surat;
+        $surat->disposisi = $request->disposisi;
+        $surat->status = 1;
+        $surat->created_by = Auth::user()->uuid;
+
+        if ($image = $request->file('surat')) {
+            $destinationPath = 'surat/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $surat->surat = "$profileImage";
+        }
+
+        $surat->save();
+
+        toastr()->success('Surat Baru Terbuat', 'Success');
+        return redirect()->route('surat.index');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $surat = Surat::uuid($id);
+        $user = Auth::user();
+            $roles = $user->getRoleNames();
+            if ($roles[0] == "sekda") {
+                return view('sekda.edit', compact('surat'));
+            }
+        return view('surat.edit', compact('surat'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'jenis_surat' => 'required',
+            'asal_surat' => 'required',
+            'tgl_surat' => 'required',
+            'perihal' => 'required',
+            'tgl_acara' => 'required',
+            'sifat_surat' => 'required'
+        ];
+
+        $messages = [
+            '*.required' => 'Field tidak boleh kosong !',
+            '*.min' => 'Nama tidak boleh kurang dari 2 karakter !',
+        ];
+
+        $this->validate($request, $rules, $messages);
+        // dd($request->all());
+
+        $surat = Surat::uuid($id);
+        if($request->hasFile('surat')){
+
+            // user intends to replace the current image for the category.  
+            // delete existing (if set)
+        
+            if($oldImage = $surat->surat) {
+        
+                unlink(public_path('surat/') . $oldImage);
+            }
+        
+            // save the new image
+            $image = $request->file('surat');
+            $destinationPath = 'surat/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $surat->surat = "$profileImage";
+        }
+        $surat->jenis_surat = $request->jenis_surat;
+        $surat->asal_surat = $request->asal_surat;
+        $surat->tgl_surat = $request->tgl_surat;
+        $surat->perihal = $request->perihal;
+        $surat->tgl_acara = $request->tgl_acara;
+        $surat->sifat_surat = $request->sifat_surat;
+        $surat->disposisi = $request->disposisi;
+        if(!empty($surat->disposisi)){
+            $surat->status = 2;
+        }
+        $surat->edited_by = Auth::user()->uuid;
+        $surat->save();
+
+        toastr()->success('Surat Baru Di Edit', 'Success');
+        return redirect()->route('surat.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $surat = Surat::uuid($id);
+        $surat->delete();
+        toastr()->success('Surat Berhasil di Hapus', 'Success');
+        return redirect()->route('surat.index');
+    }
+
+    public function download(Request $request, $id)
+    {
+        $surat = Surat::uuid($id);
+        //PDF file is stored under project/public/download/info.pdf
+        $file= public_path('surat/'.$surat->surat);
+
+        $headers = array(
+                'Content-Type: application/pdf',
+                );
+
+        return Response::download($file, 'Surat.pdf', $headers);
+
+    }
+}
