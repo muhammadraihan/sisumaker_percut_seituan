@@ -82,11 +82,11 @@
                     <div class="form-group col-md-4 mb-3">
                         {{ Form::label('surat','File Surat',['class' => 'required form-label'])}}
                         {{ Form::file('surat',null,['placeholder' => 'File Surat','class' => 'form-control upload '.($errors->has('surat') ? 'is-invalid':''),'required', 'autocomplete' => 'off', 'id' => 'surat'])}}
-                        <img id="preview-image-before-upload" src="https://www.riobeauty.co.uk/images/product_image_not_found.gif"
-                        alt="preview image" style="max-height: 250px;">
+                        
                         @if ($errors->has('surat'))
                         <div class="invalid-feedback">{{ $errors->first('surat') }}</div>
                         @endif
+                        {{ Form::label('surat','File harus berbentuk PDF !',['class' => 'required form-label'])}}
                     </div>
 
                 <div

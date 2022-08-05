@@ -4,6 +4,9 @@
 
 @section('css')
 <link rel="stylesheet" media="screen, print" href="{{asset('css/formplugins/select2/select2.bundle.css')}}">
+<link rel="stylesheet" media="screen, print" href="{{asset('css/formplugins/dropzone/dropzone.css')}}">
+<link rel="stylesheet" media="screen, print"
+    href="{{asset('css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css')}}">
 @endsection
 
 @section('content')
@@ -78,26 +81,24 @@
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         {{ Form::label('surat','File Surat',['class' => 'required form-label'])}}
-                        <input type="hidden" name="oldImage" value="{{ $surat->surat }}"> 
+                        <input type="hidden" name="oldImage" value="{{ $surat->surat }}"> </br>
                         @if ($surat->surat)
-                            <img src="{{ asset('surat/' . $surat->surat) }}" class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                            <a href="{{ asset('surat/' . $surat->surat) }}">Lihat Surat di Sini !</a>
                         @else
                             <img class="img-preview img-fluid mb-5 col-sm-5">
                         @endif
+                        </br></br>
                         {{ Form::file('surat',null,['placeholder' => 'File Surat','class' => 'form-control upload '.($errors->has('surat') ? 'is-invalid':''),'required', 'autocomplete' => 'off', 'id' => 'surat'])}}
-                        <img id="preview-image-before-upload" src="https://www.riobeauty.co.uk/images/product_image_not_found.gif"
-                        alt="preview image" style="max-height: 250px;">
                         @if ($errors->has('surat'))
                         <div class="invalid-feedback">{{ $errors->first('surat') }}</div>
                         @endif
                     </div>
+                    <div class="form-group col-md-4 mb-3">
+                     {{ Form::label('surat','File harus berbentuk PDF !',['class' => 'required form-label'])}}
+                    </div>
                 <div
                     class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
                     <button class="btn btn-primary ml-auto" type="submit">Submit</button>
-                </div>
-                <div
-                    class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-                    <a href="{{ $surat->surat }}" class="btn btn-primary ml-auto" download="">Download</a>
                 </div>
                 {!! Form::close() !!}
             </div>
@@ -111,6 +112,7 @@
 <script src="{{asset('js/formplugins/dropzone/dropzone.js')}}"></script>
 <script src="{{asset('js/formplugins/inputmask/inputmask.bundle.js')}}"></script>
 <script src="{{asset('js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
 <script>
     $(document).ready(function(){
         $('#jenis_surat').select2();

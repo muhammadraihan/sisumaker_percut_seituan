@@ -55,6 +55,7 @@
                                 disabled="disabled">Reset</button>
                         </div>
                     <!-- datatable start -->
+                    @hasrole('superadmin')
                     <table id="datatable" class="table table-bordered table-hover table-striped w-100">
         <thead>
             <tr>
@@ -72,6 +73,26 @@
                 </tr>
                         </thead>
                     </table>
+                    @endhasrole
+                    @hasrole('sekda')
+                    <table id="datatable2" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Asal Surat</th>
+                                <th>Tanggal Surat</th>
+                                <th>Sifat Surat</th>
+                                <th>Perihal</th>
+                                <th>Jenis Surat</th>
+                                <th>Tanggal Acara</th>
+                                <th>Disposisi Sekda</th>
+                                <th>Tanggal Disposisi</th>
+                                <th>Status</th>
+                                <th width="120px">Action</th>
+                                </tr>
+                                        </thead>
+                                    </table>
+                    @endhasrole
                 </div>
             </div>
         </div>
@@ -142,6 +163,33 @@
             "buttons": [
                 'excel', 'print'
             ],
+            "columns": [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'asal_surat', name: 'asal_surat'},
+            {data: 'tgl_surat', name: 'tgl_surat'},
+            {data: 'sifat_surat', name: 'sifat_surat'},
+            {data: 'perihal', name: 'perihal'},
+            {data: 'jenis_surat', name: 'jenis_surat'},
+            {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'disposisi', name: 'disposisi'},
+            {data: 'update_at', name: 'update_at'},
+            {data: 'status', name: 'status'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+    var table = $('#datatable2').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "responsive": true,
+            "order": [[ 0, "asc" ]],
+            "ajax":{
+                url:'{{route('surat.index')}}',
+                type : "GET",
+                dataType: 'json',
+                error: function(data){
+                    console.log(data);
+                    }
+            },
             "columns": [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'asal_surat', name: 'asal_surat'},

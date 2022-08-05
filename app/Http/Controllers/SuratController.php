@@ -231,10 +231,6 @@ class SuratController extends Controller
     public function create()
     {
         $user = Auth::user();
-            $roles = $user->getRoleNames();
-            if ($roles[0] == "sekda") {
-                return view('surat.index');
-            }
         return view('surat.create');
     }
 
@@ -253,12 +249,13 @@ class SuratController extends Controller
             'perihal' => 'required',
             'tgl_acara' => 'required',
             'sifat_surat' => 'required',
-            'surat' => 'required'
+            'surat' => 'required|mimes:pdf'
         ];
 
         $messages = [
             '*.required' => 'Field tidak boleh kosong !',
             '*.min' => 'Nama tidak boleh kurang dari 2 karakter !',
+            '*.mimes' => 'File harus berbentuk PDF !'
         ];
 
         $this->validate($request, $rules, $messages);
@@ -387,6 +384,10 @@ class SuratController extends Controller
     public function destroy($id)
     {
         $surat = Surat::uuid($id);
+        $file = public_path('surat/').$surat->surat;
+        if(file_exists($file)){
+            unlink($file);
+        }
         $surat->delete();
         toastr()->success('Surat Berhasil di Hapus', 'Success');
         return redirect()->route('surat.index');
