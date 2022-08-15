@@ -40,7 +40,6 @@ Route::group(['prefix' => 'backoffice', 'middleware' => ['auth']], function () {
     Route::resource('permissions', 'PermissionController');
     Route::resource('roles', 'RoleController');
     Route::resource('surat','SuratController');
-    Route::resource('sekda', 'SekdaController');
     Route::get('filter', 'SuratController@filter')->name('get.filter');
     Route::get('/download/{uuid}', 'SuratController@download')->name('get.download');
 });

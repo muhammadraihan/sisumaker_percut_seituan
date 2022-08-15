@@ -27,10 +27,12 @@
                     Surat  <span class="fw-300"><i>List</i></span>
                 </h2>
                 <div class="panel-toolbar">
+                    @unlessrole('bupati')
                     <a class="nav-link active" href="{{route('surat.create')}}"><i class="fal fa-plus-circle">
                         </i>
                         <span class="nav-link-text">Add New</span>
                     </a>
+                    @endunlessrole
                     <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip"
                         data-offset="0,10" data-original-title="Fullscreen"></button>
                 </div>
@@ -57,22 +59,23 @@
                     <!-- datatable start -->
                     @hasrole('superadmin')
                     <table id="datatable" class="table table-bordered table-hover table-striped w-100">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Asal Surat</th>
-                <th>Tanggal Surat</th>
-                <th>Sifat Surat</th>
-                <th>Perihal</th>
-                <th>Jenis Surat</th>
-                <th>Tanggal Acara</th>
-                <th>Disposisi Sekda</th>
-                <th>Tanggal Disposisi</th>
-                <th>Status</th>
-                <th width="120px">Action</th>
-                </tr>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Asal Surat</th>
+                                <th>Tanggal Surat</th>
+                                <th>Sifat Surat</th>
+                                <th>Perihal</th>
+                                <th>Jenis Surat</th>
+                                <th>Tanggal Acara</th>
+                                <th>Sampai Tanggal</th>
+                                <th>Disposisi Sekda</th>
+                                <th>Tanggal Disposisi</th>
+                                <th>Status</th>
+                                <th width="120px">Action</th>
+                            </tr>
                         </thead>
-                    </table>
+                     </table>
                     @endhasrole
                     @hasrole('sekda')
                     <table id="datatable2" class="table table-bordered table-hover table-striped w-100">
@@ -85,13 +88,33 @@
                                 <th>Perihal</th>
                                 <th>Jenis Surat</th>
                                 <th>Tanggal Acara</th>
+                                <th>Sampai Tanggal</th>
                                 <th>Disposisi Sekda</th>
                                 <th>Tanggal Disposisi</th>
                                 <th>Status</th>
                                 <th width="120px">Action</th>
-                                </tr>
-                                        </thead>
-                                    </table>
+                            </tr>
+                        </thead>
+                    </table>
+                    @endhasrole
+                    @hasrole('bupati')
+                    <table id="datatable3" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Asal Surat</th>
+                                <th>Tanggal Surat</th>
+                                <th>Sifat Surat</th>
+                                <th>Perihal</th>
+                                <th>Jenis Surat</th>
+                                <th>Tanggal Acara</th>
+                                <th>Sampai Tanggal</th>
+                                <th>Disposisi Sekda</th>
+                                <th>Tanggal Disposisi</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                    </table>
                     @endhasrole
                 </div>
             </div>
@@ -150,6 +173,7 @@
             "processing": true,
             "serverSide": true,
             "responsive": true,
+            "pageLength" : 50,
             "order": [[ 0, "asc" ]],
             "ajax":{
                 url:'{{route('surat.index')}}',
@@ -171,8 +195,9 @@
             {data: 'perihal', name: 'perihal'},
             {data: 'jenis_surat', name: 'jenis_surat'},
             {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
             {data: 'disposisi', name: 'disposisi'},
-            {data: 'update_at', name: 'update_at'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
@@ -181,6 +206,7 @@
             "processing": true,
             "serverSide": true,
             "responsive": true,
+            "pageLength" : 50,
             "order": [[ 0, "asc" ]],
             "ajax":{
                 url:'{{route('surat.index')}}',
@@ -198,10 +224,39 @@
             {data: 'perihal', name: 'perihal'},
             {data: 'jenis_surat', name: 'jenis_surat'},
             {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
             {data: 'disposisi', name: 'disposisi'},
-            {data: 'update_at', name: 'update_at'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+    var table = $('#datatable3').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "responsive": true,
+            "pageLength" : 50,
+            "order": [[ 0, "asc" ]],
+            "ajax":{
+                url:'{{route('surat.index')}}',
+                type : "GET",
+                dataType: 'json',
+                error: function(data){
+                    console.log(data);
+                    }
+            },
+            "columns": [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'asal_surat', name: 'asal_surat'},
+            {data: 'tgl_surat', name: 'tgl_surat'},
+            {data: 'sifat_surat', name: 'sifat_surat'},
+            {data: 'perihal', name: 'perihal'},
+            {data: 'jenis_surat', name: 'jenis_surat'},
+            {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
+            {data: 'disposisi', name: 'disposisi'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
+            {data: 'status', name: 'status'},
         ]
     });
 
@@ -226,6 +281,8 @@
             $('#filter').attr('disabled',false);
             $('#resetFilter').attr('disabled',false);
         });
+
+        
         $('#filter').click(function (e){
             var start_date = $('#start_date').val();
             var end_date = $('#end_date').val();
@@ -236,6 +293,7 @@
             "serverSide": true,
             "responsive": true,
             "searching": false,
+            "pageLength" : 50,
             "order": [[ 0, "asc" ]],
             "ajax":{
                 url:'{{route('get.filter')}}',
@@ -261,17 +319,87 @@
             {data: 'perihal', name: 'perihal'},
             {data: 'jenis_surat', name: 'jenis_surat'},
             {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
             {data: 'disposisi', name: 'disposisi'},
-            {data: 'update_at', name: 'update_at'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+    $('#datatable2').DataTable({
+            "destroy": true,
+            "processing": true,
+            "serverSide": true,
+            "responsive": true,
+            "searching": false,
+            "pageLength" : 50,
+            "order": [[ 0, "asc" ]],
+            "ajax":{
+                url:'{{route('get.filter')}}',
+                type : "GET",
+                data: {
+                       start_date: start_date,
+                       end_date: end_date,
+                    },
+                dataType: 'json',
+                error: function(data){
+                    console.log(data);
+                    }
+            },
+            "columns": [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'asal_surat', name: 'asal_surat'},
+            {data: 'tgl_surat', name: 'tgl_surat'},
+            {data: 'sifat_surat', name: 'sifat_surat'},
+            {data: 'perihal', name: 'perihal'},
+            {data: 'jenis_surat', name: 'jenis_surat'},
+            {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
+            {data: 'disposisi', name: 'disposisi'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
+            {data: 'status', name: 'status'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+    $('#datatable3').DataTable({
+            "destroy": true,
+            "processing": true,
+            "serverSide": true,
+            "responsive": true,
+            "searching": false,
+            "pageLength" : 50,
+            "order": [[ 0, "asc" ]],
+            "ajax":{
+                url:'{{route('get.filter')}}',
+                type : "GET",
+                data: {
+                       start_date: start_date,
+                       end_date: end_date,
+                    },
+                dataType: 'json',
+                error: function(data){
+                    console.log(data);
+                    }
+            },
+            "columns": [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'asal_surat', name: 'asal_surat'},
+            {data: 'tgl_surat', name: 'tgl_surat'},
+            {data: 'sifat_surat', name: 'sifat_surat'},
+            {data: 'perihal', name: 'perihal'},
+            {data: 'jenis_surat', name: 'jenis_surat'},
+            {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
+            {data: 'disposisi', name: 'disposisi'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
+            {data: 'status', name: 'status'},
         ]
     });
 });
 
 $('#resetFilter').click(function(e){
-            $('#tahun').val('').datepicker("update");
-            $('#bulan').val('').datepicker("update");
+            $('#start_date').val('').datepicker("update");
+            $('#end_date').val('').datepicker("update");
             $('#filter').attr('disabled',true);
             $('#resetFilter').attr('disabled',true);
             
@@ -281,6 +409,7 @@ $('#resetFilter').click(function(e){
                 "serverSide": true,
                 "responsive": true,
                 "searching": false,
+                "pageLength" : 50,
             "order": [[ 0, "asc" ]],
             "ajax":{
                 url:'{{route('surat.index')}}',
@@ -302,10 +431,70 @@ $('#resetFilter').click(function(e){
             {data: 'perihal', name: 'perihal'},
             {data: 'jenis_surat', name: 'jenis_surat'},
             {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
             {data: 'disposisi', name: 'disposisi'},
-            {data: 'update_at', name: 'update_at'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+    $('#datatable2').DataTable({
+            "destroy" : true,
+            "processing": true,
+            "serverSide": true,
+            "responsive": true,
+            "pageLength" : 50,
+            "order": [[ 0, "asc" ]],
+            "ajax":{
+                url:'{{route('surat.index')}}',
+                type : "GET",
+                dataType: 'json',
+                error: function(data){
+                    console.log(data);
+                    }
+            },
+            "columns": [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'asal_surat', name: 'asal_surat'},
+            {data: 'tgl_surat', name: 'tgl_surat'},
+            {data: 'sifat_surat', name: 'sifat_surat'},
+            {data: 'perihal', name: 'perihal'},
+            {data: 'jenis_surat', name: 'jenis_surat'},
+            {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
+            {data: 'disposisi', name: 'disposisi'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
+            {data: 'status', name: 'status'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+     $('#datatable3').DataTable({
+            "destroy": true,
+            "processing": true,
+            "serverSide": true,
+            "responsive": true,
+            "pageLength" : 50,
+            "order": [[ 0, "asc" ]],
+            "ajax":{
+                url:'{{route('surat.index')}}',
+                type : "GET",
+                dataType: 'json',
+                error: function(data){
+                    console.log(data);
+                    }
+            },
+            "columns": [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'asal_surat', name: 'asal_surat'},
+            {data: 'tgl_surat', name: 'tgl_surat'},
+            {data: 'sifat_surat', name: 'sifat_surat'},
+            {data: 'perihal', name: 'perihal'},
+            {data: 'jenis_surat', name: 'jenis_surat'},
+            {data: 'tgl_acara', name: 'tgl_acara'},
+            {data: 'tgl_sampai', name: 'tgl_sampai'},
+            {data: 'disposisi', name: 'disposisi'},
+            {data: 'tgl_disposisi', name: 'tgl_disposisi'},
+            {data: 'status', name: 'status'},
         ]
     });
 });

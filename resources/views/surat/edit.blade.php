@@ -70,6 +70,13 @@
                         @endif
                     </div>  
                     <div class="form-group col-md-4 mb-3">
+                        {{ Form::label('tgl_sampai','Sampai Tanggal',['class' => 'required form-label'])}}
+                        {{ Form::text('tgl_sampai',$surat->tgl_sampai,['placeholder' => 'Sampai Tanggal','class' => 'tgl_sampai form-control '.($errors->has('tgl_sampai') ? 'is-invalid':''),'required', 'autocomplete' => 'off'])}}
+                        @if ($errors->has('tgl_sampai'))
+                        <div class="invalid-feedback">{{ $errors->first('tgl_sampai') }}</div>
+                        @endif
+                    </div>  
+                    <div class="form-group col-md-4 mb-3">
                         {{ Form::label('sifat_surat','Sifat Surat',['class' => 'required form-label'])}}
                         {!! Form::select('sifat_surat', array('biasa' => 'Biasa', 'segera' => 'Segera'), $surat->sifat_surat,
                         ['id'=>'sifat_surat','class'
@@ -128,6 +135,14 @@
             clearBtn: true,
         });
         $('.tgl_acara').datepicker({
+            orientation: "bottom left",
+            format:'yyyy-mm-dd', // Notice the Extra space at the beginning
+            todayHighlight:'TRUE',
+            autoclose: true,
+            todayBtn: "linked",
+            clearBtn: true,
+        });
+        $('.tgl_sampai').datepicker({
             orientation: "bottom left",
             format:'yyyy-mm-dd', // Notice the Extra space at the beginning
             todayHighlight:'TRUE',

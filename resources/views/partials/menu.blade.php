@@ -1,17 +1,11 @@
 <ul id="js-nav-menu" class="nav-menu">
     <li>
-        @hasrole('superadmin|tatausaha|sekda')
+        @hasrole('superadmin|tatausaha|sekda|bupati')
         <a href="{{route('backoffice.dashboard')}}" title="Dashboard" data-filter-tags="dashboard">
             <i class="fal fa-desktop"></i>
             <span class="nav-link-text">Dashboard</span>
         </a>
         <a href="{{route('surat.index')}}" title="Surat" data-filter-tags="surat">
-            <i class="fal fa-edit"></i>
-            <span class="nav-link-text">Surat</span>
-        </a>
-        @endhasrole
-        @hasrole('bupati')
-        <a href="{{route('sekda.index')}}" title="Surat" data-filter-tags="surat">
             <i class="fal fa-edit"></i>
             <span class="nav-link-text">Surat</span>
         </a>
