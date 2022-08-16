@@ -6,8 +6,12 @@
             <span class="nav-link-text">Dashboard</span>
         </a>
         <a href="{{route('surat.index')}}" title="Surat" data-filter-tags="surat">
-            <i class="fal fa-edit"></i>
-            <span class="nav-link-text">Surat</span>
+            <i class="fal fa-envelope"></i>
+            <span class="nav-link-text">Surat Baru</span>
+        </a>
+        <a href="{{route('get.dibaca')}}" title="Surat" data-filter-tags="surat">
+            <i class="fal fa-envelope-open"></i>
+            <span class="nav-link-text">Surat Sudah Dibaca</span>
         </a>
         @endhasrole
        
