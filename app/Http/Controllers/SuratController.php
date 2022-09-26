@@ -26,7 +26,7 @@ class SuratController extends Controller
         if (request()->ajax()) {
             $user = Auth::user();
             $roles = $user->getRoleNames();
-            if ($roles[0] == "sekda") {
+            if ($roles[0] == "sekcam") {
                 $surat = Surat::all()->where('status','=', 1);
 
             return Datatables::of($surat)
@@ -87,7 +87,7 @@ class SuratController extends Controller
                 ->rawColumns(['action','sifat_surat','status'])
                 ->make(true);
         }
-        elseif ($roles[0] == "bupati") {
+        elseif ($roles[0] == "tamu") {
             $surat = Surat::all()->where('status','=', 1);
 
         return Datatables::of($surat)
@@ -218,7 +218,7 @@ class SuratController extends Controller
         if (request()->ajax()) {
             $user = Auth::user();
             $roles = $user->getRoleNames();
-            if ($roles[0] == "sekda") {
+            if ($roles[0] == "sekcam") {
                 $surat = Surat::all()->where('status','=', 2);
 
             return Datatables::of($surat)
@@ -279,7 +279,7 @@ class SuratController extends Controller
                 ->rawColumns(['action','sifat_surat','status'])
                 ->make(true);
         }
-        elseif ($roles[0] == "bupati") {
+        elseif ($roles[0] == "tamu") {
             $surat = Surat::all()->where('status','=', 2);
 
         return Datatables::of($surat)
@@ -411,7 +411,7 @@ class SuratController extends Controller
 
         $user = Auth::user();
             $roles = $user->getRoleNames();
-            if ($roles[0] == "sekda") {
+            if ($roles[0] == "sekcam") {
                 $surat = Surat::all();
 
             return Datatables::of($myDate)

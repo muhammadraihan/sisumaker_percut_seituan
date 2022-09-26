@@ -1,6 +1,5 @@
 <ul id="js-nav-menu" class="nav-menu">
     <li>
-        @hasrole('superadmin|tatausaha|sekda|bupati')
         <a href="{{route('backoffice.dashboard')}}" title="Dashboard" data-filter-tags="dashboard">
             <i class="fal fa-desktop"></i>
             <span class="nav-link-text">Dashboard</span>
@@ -13,7 +12,10 @@
             <i class="fal fa-envelope-open"></i>
             <span class="nav-link-text">Surat Sudah Dibaca</span>
         </a>
-        @endhasrole
+        <a href="{{route('suratkeluar.index')}}" title="Surat Keluar" data-filter-tags="suratkeluar">
+            <i class="fal fa-external-link"></i>
+            <span class="nav-link-text">Surat Keluar</span>
+        </a>
        
     </li>
     @isset($menu)

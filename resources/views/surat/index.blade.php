@@ -8,6 +8,7 @@
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" media="screen, print"
     href="{{asset('css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css')}}">
+    <meta http-equiv="refresh" content="120" > 
 @endsection
 
 @section('content')
@@ -27,7 +28,7 @@
                     Surat  <span class="fw-300"><i>List</i></span>
                 </h2>
                 <div class="panel-toolbar">
-                    @unlessrole('bupati')
+                    @unlessrole('tamu')
                     <a class="nav-link active" href="{{route('surat.create')}}"><i class="fal fa-plus-circle">
                         </i>
                         <span class="nav-link-text">Add New</span>
@@ -69,7 +70,7 @@
                                 <th>Jenis Surat</th>
                                 <th>Tanggal Acara</th>
                                 <th>Sampai Tanggal</th>
-                                <th>Disposisi Sekda</th>
+                                <th>Disposisi Sekcam</th>
                                 <th>Tanggal Disposisi</th>
                                 <th>Status</th>
                                 <th width="120px">Action</th>
@@ -77,7 +78,7 @@
                         </thead>
                      </table>
                     @endhasrole
-                    @hasrole('sekda')
+                    @hasrole('sekcam')
                     <table id="datatable2" class="table table-bordered table-hover table-striped w-100">
                         <thead>
                             <tr>
@@ -89,7 +90,7 @@
                                 <th>Jenis Surat</th>
                                 <th>Tanggal Acara</th>
                                 <th>Sampai Tanggal</th>
-                                <th>Disposisi Sekda</th>
+                                <th>Disposisi Sekcam</th>
                                 <th>Tanggal Disposisi</th>
                                 <th>Status</th>
                                 <th width="120px">Action</th>
@@ -97,7 +98,7 @@
                         </thead>
                     </table>
                     @endhasrole
-                    @hasrole('bupati')
+                    @hasrole('tamu')
                     <table id="datatable3" class="table table-bordered table-hover table-striped w-100">
                         <thead>
                             <tr>
@@ -109,7 +110,7 @@
                                 <th>Jenis Surat</th>
                                 <th>Tanggal Acara</th>
                                 <th>Sampai Tanggal</th>
-                                <th>Disposisi Sekda</th>
+                                <th>Disposisi Sekcam</th>
                                 <th>Tanggal Disposisi</th>
                                 <th>Status</th>
                             </tr>
