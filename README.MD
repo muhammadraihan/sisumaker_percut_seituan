@@ -1,4 +1,3 @@
-<p align="center"><img src="https://res.cloudinary.com/wba-indonesia/image/upload/v1598387833/logo_wba_dafkys.png" width="400"></p>
 
 <p align="center">
 </p>
