@@ -16,7 +16,7 @@
         Hi {{Auth::user()->name}},
     </h3>
     <p>
-        Welcome on board, Sisumaker Percut Sei Tuan
+        Welcome on board, Sisumaker Percut Sei Tuan !
     </p>
     <p>
         Sincerely,<br>
