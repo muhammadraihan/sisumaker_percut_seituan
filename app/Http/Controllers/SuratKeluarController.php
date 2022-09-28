@@ -61,7 +61,7 @@ class SuratKeluarController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return Datatables::of($myDate)
+        return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('tgl_surat', function ($row) {
                     if ($row->tgl_surat == null){
